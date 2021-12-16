@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for proj in ownedProjects %}
+        <a href="{% url 'project_individual_view' projectPK=proj.pk %}">{{ proj.title }}</a>
+    {% endfor %}
+
+    {% for proj in moderatingProjects %}
+        <a href="{% url 'project_individual_view' projectPK=proj.pk %}">{{ proj.title }}</a>
+    {% endfor %}
+
+    {% for proj in workingOnProjects %}
+        <a href="{% url 'project_individual_view' projectPK=proj.pk %}">{{ proj.title }}</a>
+    {% endfor %}
+{% endblock %}

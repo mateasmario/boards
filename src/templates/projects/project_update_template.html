@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Project Title" value="{{ project.title }}" required>
+        <textarea name="description" placeholder="Project Description" required>{{ project.description }}</textarea>
+        <input type="submit" value="Update">
+    </form>
+{% endblock %}
