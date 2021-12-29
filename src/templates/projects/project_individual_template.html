@@ -1,6 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {{ project.title }}
-    {{ project.description }}
+    {% include 'projects/project_nav.html' %}
+
+    <h3>{{ project.title }} <small>{{ project.pk }}</small></h3>
+    {{ project.description }}<br>
+
+    <br>
+
+    <i class="fas fa-user"> </i> &nbsp;User information
+    <br>
+    <ul>
+        <li>Owner: {{ project.owner }}</li>
+        <li>Moderators: {{ project.mods.count }}</li>
+        <li>Members: {{ project.members.count }}</li>
+        <li>Project intended for {{ project.averageNoPeople }} people</li>
+    </ul>
+
+    <i class="fas fa-calendar"> </i> &nbsp;Released on {{ project.date }}<br>
+
+    <br>
+
+    {% if project.github %}
+        <a href="{{ project.github }}" style="text-decoration: none"><i class="fab fa-github"> </i> &nbsp;Visit GitHub Page</a><br>
+    {% endif %}
+    {% if project.devwebsite %}
+        <a href="{{ project.devwebsite }}" style="text-decoration: none"><i class="fas fa-globe"> </i>&nbsp; Visit developer's website</a><br>
+    {% endif %}
+
+    <br>
+
+    <h4 class="card-title"><i class="fas fa-user-plus"> </i> Invite someone to join {{ project.title }}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">(only works if you're at least a Moderator)</h6>
+    <form action="invite/" method="POST">
+        {% csrf_token %}
+        <input type="text" class="form-control" placeholder="Type in someone's name and press ENTER" name="username" required>
+    </form>
 {% endblock %}

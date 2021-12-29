@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+    <h4><i class="fas fa-user-shield"> </i> Owner</h4>
+        {{ project.owner }}<br>
+    <br>
+    <h4><i class="fas fa-user-cog"> </i> Moderators</h4>
+        {% if mods.count %}
+            {% for mod in project.mods.all %}
+                {{ mod }}<br>
+            {% endfor %}
+        {% else %}
+            There are currently no moderators on this project.<br>
+        {% endif %}
+    <br>
+    <h4><i class="fas fa-user-tag"> </i> Members</h4>
+        {% if project.members.count %}
+            {% for member in project.members.all %}
+                {{ member }}<br>
+            {% endfor %}
+        {% else %}
+            There are currently no members on this project.<br>
+        {% endif %}
+{% endblock %}

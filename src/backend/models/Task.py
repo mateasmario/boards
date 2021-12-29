@@ -29,3 +29,4 @@ class Task(models.Model):
     assignee = models.ForeignKey(User, related_name="assignee", on_delete=models.CASCADE)
     solved = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    commit = models.CharField(max_length=64, blank=True)

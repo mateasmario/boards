@@ -2,18 +2,63 @@
 <html>
    <head>
       {% load static %}
+      {% if request.session.darkmode  %}
+      <link rel="stylesheet" href="{% static 'bootstrap-dark.css' %}">
+      {% else %}
       <link rel="stylesheet" href="{% static 'bootstrap.css' %}">
+      {% endif %}
+      <link rel="stylesheet" href="{% static 'custom.css' %}">
       <title>
          Boards
       </title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="https://kit.fontawesome.com/5057056b65.js" crossorigin="anonymous"></script>
+      <script>
+        function closeMessage() {
+            document.getElementById("close").style.display = "none";
+        }
+
+        function modifyValue() {
+            var x = document.getElementById("slider").value
+            if (x+1 == 1)
+                document.getElementById("output").innerHTML = "I'm working on this project alone";
+            else if (x < 100)
+                document.getElementById("output").innerHTML = "My project is oriented towards " + x + " people";
+            else
+                document.getElementById("output").innerHTML = "100 or more people are working on this project";
+        }
+        </script>
    </head>
    <body>
       {% include 'nav.html' %}
+
       {% for message in messages %}
-          {{ message }}
+          {% if message.tags == "success" %}
+              {% if request.session.disableinformalmessages %}
+              {% else %}
+                  <div class="alert alert-dismissible alert-success" id="close">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" onclick="closeMessage()"></button>
+                    {{ message }}
+                  </div>
+              {% endif %}
+          {% elif message.tags == "info" %}
+              {% if request.session.disableinformalmessages %}
+              {% else %}
+                  <div class="alert alert-dismissible alert-primary" id="close">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" onclick="closeMessage()"></button>
+                    {{ message }}
+                  </div>
+              {% endif %}
+          {% elif message.tags == "error" %}
+          <div class="alert alert-dismissible alert-danger" id="close">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" onclick="closeMessage()"></button>
+            {{ message }}
+          </div>
+          {% endif %}
       {% endfor %}
-      {% block content %}
-      {% endblock %}
+          <div style="padding: 15px">
+              {% block content %}
+              {% endblock %}
+          </div>
    </body>
 </html>

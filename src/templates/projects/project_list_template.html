@@ -2,14 +2,35 @@
 
 {% block content %}
     {% for proj in ownedProjects %}
-        <a href="{% url 'project_individual_view' projectPK=proj.pk %}">{{ proj.title }}</a>
+          <a href="{% url 'project_individual_view' projectPK=proj.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ proj.title }}</h5>
+                <small class="text-muted">{{ proj.date }} </i></small>
+            </div>
+            <p class="mb-1">{{ proj.description }}</p>
+            <small class="text-muted">You're the owner of this project.</small>
+          </a>
     {% endfor %}
 
     {% for proj in moderatingProjects %}
-        <a href="{% url 'project_individual_view' projectPK=proj.pk %}">{{ proj.title }}</a>
+          <a href="{% url 'project_individual_view' projectPK=proj.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ proj.title }}</h5>
+              <small class="text-muted">{{ proj.date }}</small>
+            </div>
+            <p class="mb-1">{{ proj.description }}</p>
+            <small class="text-muted">You're moderating this project.</small>
+          </a>
     {% endfor %}
 
     {% for proj in workingOnProjects %}
-        <a href="{% url 'project_individual_view' projectPK=proj.pk %}">{{ proj.title }}</a>
+          <a href="{% url 'project_individual_view' projectPK=proj.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ proj.title }}</h5>
+              <small class="text-muted">{{ proj.date }}</small>
+            </div>
+            <p class="mb-1">{{ proj.description }}</p>
+            <small class="text-muted">You're a member of this project.</small>
+          </a>
     {% endfor %}
 {% endblock %}

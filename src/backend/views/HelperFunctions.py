@@ -1,5 +1,6 @@
 from django.contrib import messages
 
+from backend.models.Comment import Comment
 from backend.models.Project import Project
 from backend.models.Task import Task
 
@@ -57,6 +58,12 @@ def isMember(projectPK, givenUser): # check if the logged in user is at least a 
             return True
     return False
 
+def isIssuer(taskPK, givenUser):
+    if taskExists(taskPK):
+        if Task.objects.filter(pk=taskPK, issuer=givenUser).exists():
+            return True
+        return False
+
 # Task functions
 def taskExists(taskPK):
     if Task.objects.filter(pk=taskPK).exists():
@@ -73,4 +80,31 @@ def taskBelongsToProject(taskPK, projectPK):
 def isAssignee(taskPK, givenUser):
     if taskExists(taskPK) and Task.objects.filter(pk=taskPK, assignee=givenUser).exists():
         return True
+    return False
+
+def isCreator(commentPK, givenUser): # also checks if comment exists
+    if Comment.objects.filter(pk=commentPK, creator=givenUser).exists():
+        return True
+    return False
+
+def isGitHubURL(url):
+    url = url.lower()
+    formattedURL = url.split(".")
+    print(formattedURL)
+
+    try:
+        # for http://github.com and https://github.com
+        if ((formattedURL[0] == "http://github" or formattedURL[0] == "https://github") and formattedURL[1][0:3] == "com" and not formattedURL[1][3].isalpha()):
+            return True
+        # for http://www.github.com and https://www.github.com
+        elif ((formattedURL[0] == "http://www" or formattedURL[0] == "https://www") and formattedURL[1] == "github" and formattedURL[2][0:3] == "com" and not formattedURL[2][3].isalpha()):
+            return True
+        # for www.github.com
+        elif (formattedURL[0] == "www" and formattedURL[1] == "github" and formattedURL[2][0:3] == "com" and not formattedURL[2][3].isalpha()):
+            return True
+        # for github.com
+        elif (formattedURL[0] == "github" and formattedURL[1][0:3] == "com" and not formattedURL[1][3].isalpha()):
+            return True
+    except:
+        return False
     return False

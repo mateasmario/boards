@@ -3,8 +3,20 @@
 {% block content %}
     <form method="POST">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Log in">
+        <fieldset>
+            <legend>Log in to Boards</legend>
+            <div class="form-group">
+                <label class="form-label mt-4">Username</label>
+                <input type="text" class="form-control" placeholder="ILovePancakes1998" name="username" required>
+                <small class="form-text text-muted">Don't have an account yet? <a href="{% url 'auth_register_view' %}">Register here</a>.</small>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Password</label>
+                <input type="password" class="form-control" placeholder="12345 - no, don't use that" name="password" required>
+                <small class="form-text text-muted">If you forgot your password, make sure to check out <a href="#">this link</a>.</small>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Log in</button>
+        </fieldset>
     </form>
 {% endblock %}

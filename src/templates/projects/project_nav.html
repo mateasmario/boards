@@ -1,0 +1,12 @@
+ <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'project_individual_view' projectPK=project.pk %}" style="text-decoration: none"><i class="fas fa-folder"> </i> {{ project.title }}</a></li>
+      <li class="breadcrumb-item project-menu-item"><a href="{% url 'task_list_view' projectPK=project.pk %}" style="text-decoration: none">Tasks</a></li>
+      <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_members_view' projectPK=project.pk %}" style="text-decoration: none">Members</a></li>
+      {% if project.github %}
+          <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_github_view' projectPK=project.pk %}" style="text-decoration: none">GitHub</a></li>
+      {% endif %}
+      {% if isOwner %}
+        <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_update_view' projectPK=project.pk %}" style="text-decoration: none">Edit Project</a></li>
+        <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_delete_view' projectPK=project.pk %}" onclick="return confirm('Are you sure you want to delete project {{ project.title }}?');" style="text-decoration: none"><span style="color:orangered">Delete Project</span></a></li>
+      {% endif %}
+    </ol>
