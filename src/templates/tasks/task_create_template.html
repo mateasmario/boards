@@ -1,30 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% include 'projects/project_nav.html' %}
     <form method="POST">
         {% csrf_token %}
-        <input type="text" name="title" placeholder="Task Title" required>
-        <textarea name="description" placeholder="Task Description" required></textarea>
-        <select name="priority">
-            <option value="S" selected>Small</option>
-            <option value="M">Medium</option>
-            <option value="H">High</option>
-            <option value="U">Urgent</option>
-        </select>
-        <select name="type">
-            <option value="F" selected>Feature</option>
-            <option value="B" selected>Bug</option>
-            <option value="M" selected>Modification</option>
-        </select>
-        <select name="assignee">
-            {% for member in members %}
-                <option value="{{ member.username }}">{{ member.username }}</option>
-            {% endfor %}
-            {% for mod in mods %}
-                <option value="{{ mod.username }}">[M] {{ mod.username }}</option>
-            {% endfor %}
-            <option value="{{ owner.username }}">[O] {{ owner.username }}</option>
-        </select>
-        <input type="submit" value="Create">
+        <fieldset style="width: 50%">
+            <legend>Create a task</legend>
+            <div class="form-group">
+                <label class="form-label mt-4">Task Title</label>
+                <input type="text" class="form-control" placeholder="e.g. 'Do a backflip'" name="title" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Description</label>
+                <textarea class="form-control" rows="3" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Task Priority</label>
+                <select name="priority" class="form-select">
+                    <option value="S">Small</option>
+                    <option value="M">Medium</option>
+                    <option value="H">High</option>
+                    <option value="U">Urgent</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Issue Type</label>
+                <select name="type" class="form-select">
+                    <option value="F" selected>Feature</option>
+                    <option value="B">Bug</option>
+                    <option value="M">Modification</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Assignee</label>
+                <select name="assignee" class="form-select">
+                    {% for member in members %}
+                        <option value="{{ member.username }}">{{ member.username }}</option>
+                    {% endfor %}
+                    {% for mod in mods %}
+                        <option value="{{ mod.username }}">{{ mod.username }}</option>
+                    {% endfor %}
+                    <option value="{{ owner.username }}">{{ owner.username }}</option>
+                </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </fieldset>
     </form>
 {% endblock %}

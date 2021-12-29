@@ -1,7 +1,83 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for task in tasks %}
-        <a href="{% url 'task_individual_view' projectPK=task.project.pk taskPK=task.pk %}">{{ task.title }} (#{{ task.pk }})</a>
-    {% endfor %}
+    {% include 'projects/project_nav.html' %}
+    <h3>Your tasks</h3>
+    {% if myTasks.count %}
+        <div class="list-group">
+            {% for task in myTasks %}
+                <a href="{% url 'task_individual_view' projectPK=task.project.pk taskPK=task.pk %}" class="list-group-item list-group-item-action">
+                    {% if task.solved %}
+                        <span style="color:cornflowerblue">
+                    {% else %}
+                        <span style="color:lightslategray">
+                    {% endif %}
+                    <i class="fas fa-circle"> </i>
+                    </span>
+                    {{ task.pk }} <strong>{{ task.title }}</strong> <small> by {{ task.issuer }} on {{ task.date }}</small><br><small>Assigned to <strong>{{ task.assignee }}</strong>
+                    {% if task.priority == "S" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif task.priority == "M" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif task.priority == "H" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif task.priority == "U" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% endif %}
+                    </small></a>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p style="display: inline">There are no tasks assigned to you available at this moment.<br>
+                </p>
+            {% endif %}
+    <br>
+    <h3>Other tasks</h3>
+    {% if otherTasks.count %}
+        <div class="list-group">
+            {% for task in otherTasks %}
+                <a href="{% url 'task_individual_view' projectPK=task.project.pk taskPK=task.pk %}" class="list-group-item list-group-item-action">
+                    {% if task.solved %}
+                        <span style="color:cornflowerblue">
+                    {% else %}
+                        <span style="color:lightslategray">
+                    {% endif %}
+                    <i class="fas fa-circle"> </i>
+                    </span>
+                    {{ task.pk }} <strong>{{ task.title }}</strong> <small> by {{ task.issuer }} on {{ task.date }}</small><br><small>Assigned to <strong>{{ task.assignee }}</strong>.
+                    {% if task.priority == "S" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif task.priority == "M" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif task.priority == "H" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif task.priority == "U" %}
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% endif %}
+                    </small></a>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p style="display: inline">There are no tasks available at this moment.<br>
+                </p>
+            {% endif %}
+
+    <br>
+    <a href="{% url 'task_create_view' projectPK=project.pk %}"><button type="button" class="btn btn-primary">Add a task</button></a>
 {% endblock %}

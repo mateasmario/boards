@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+
+    <script>
+    function copyCloneURL() {
+        navigator.clipboard.writeText("{{ github.clone_url }}");
+    }
+    </script>
+
+    <h3><i class="fab fa-github"> </i> <a href="{{ github.html_url }}">{{ github.full_name }}</a></h3>
+
+    <button class="btn btn-dark" disabled><i class="fas fa-code"> </i> {{ github.language }}</button>
+    <button onclick="copyCloneURL()" class="btn btn-primary"><i class="fas fa-clipboard"> </i> Copy Clone URL</button>
+    <a href="{{ github.owner.html_url }}"><button class="btn btn-primary"><i class="fas fa-link"> </i> Owner's page</button></a>
+
+    <br><br>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"><i class="fas fa-crown"> </i> Repository Owner</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.owner.login }}">
+            </div>
+        <label class="col-sm-2 col-form-label"><i class="fas fa-book-open"> </i> Description</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.description }}">
+            </div>
+        <label class="col-sm-2 col-form-label"><i class="fas fa-calendar"> </i> Created at</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.created_at }}">
+            </div>
+        <label class="col-sm-2 col-form-label"><i class="fa fa-refresh"> </i> Updated at</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.updated_at }}">
+            </div>
+        <label class="col-sm-2 col-form-label"><i class="fa fa-eye"> </i> Watchers Count</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.watchers_count }}">
+            </div>
+        <label class="col-sm-2 col-form-label"><i class="fa fa-newspaper"> </i> Subscribers Count</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.subscribers_count }}">
+            </div>
+        <label class="col-sm-2 col-form-label"><i class="fa fa-star"> </i> Stargazers Count</label>
+            <div class="col-sm-10">
+                <input type="text" readonly="" class="form-control-plaintext" value="{{ github.stargazers_count }}">
+            </div>
+    </div>
+{% endblock %}

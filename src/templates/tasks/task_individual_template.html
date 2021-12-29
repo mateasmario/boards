@@ -1,10 +1,77 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {{ task.title }}
+    {% include 'projects/project_nav.html' %}
+    <h3>{{ task.title }}</h3>
+    {% if task.solved %}
+        <span style="color:cornflowerblue"><i class="fas fa-circle"> </i> Solved</span>
+    {% else %}
+        <span style="color:lightslategray"><i class="fas fa-circle"> </i> Unsolved</span>
+    {% endif %}
+    <br>
+    {% if task.priority == "S"%}
+        <i class="fas fa-coffee"> </i> Small Priority
+    {% elif task.priority == "M" %}
+        <i class="fas fa-coffee"> </i> Medium Priority
+    {% elif task.priority == "H" %}
+        <i class="fas fa-coffee"> </i> High Priority
+    {% elif task.priority == "U" %}
+        <i class="fas fa-coffee"> </i> Urgent Priority
+    {% endif %}
+    <br>
+    {% if task.type == "F" %}
+        <i class="fas fa-star"> </i> Feature
+    {% elif task.type == "B" %}
+        <i class="fas fa-bug"> </i> Bug
+    {% elif task.type == "M" %}
+        <i class="fas fa-wrench"> </i> Modification
+    {% endif %}
+    <br>
+    <i class="fas fa-user"> </i> From <strong>{{ task.issuer }}</strong> to <strong>{{ task.assignee }}</strong>
+    <br>
+    <i class="fas fa-calendar"> </i> {{ task.date }}
+    <br><br>
     {{ task.description }}
-    {{ task.issue }}
-    {{ task.assignee }}
-    {{ task.priority }}
-    {{ task.type }}
+    <br><br>
+
+    {% if task.assignee == request.user or task.issuer == request.user or isMod %}
+        {% if project.github != "" %}
+        <input type="text" class="form-control" style="width: 50%; display: inline" placeholder="Enter Commit ID">
+        <a href="#"><button type="button" class="btn btn-primary"><i class="fas fa-code-branch"> </i> Link Commit</button></a>
+        <br><br>
+        {% endif %}
+        {% if task.solved %}
+        <a href="{% url 'task_mark_unsolved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary">Mark as unsolved</button></a>
+        {% else %}
+        <a href="{% url 'task_mark_solved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary">Mark as solved</button></a>
+        {% endif %}
+    {% endif %}
+    {% if task.issuer == request.user or isMod %}
+        <a href="{% url 'task_delete_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-danger">Delete Task</button></a>
+    {% endif %}
+
+    <br><br>
+    <form action="{% url 'task_comment_add_view' projectPK=project.pk taskPK=task.pk %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="exampleTextarea" class="form-label mt-4">Add a comment</label>
+          <textarea class="form-control" id="exampleTextarea" rows="3" name="content"></textarea><br>
+          <button type="submit" class="btn btn-primary">Add comment</button>
+        </div>
+    </form>
+    <br>
+    {% for comment in comments %}
+        <div class="list-group">
+          <div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><i class="fas fa-user"> </i> {{ comment.creator }}</h5>
+              <small class="text-muted">{{ comment.date }}</small>
+            </div>
+            <p class="mb-1">{{ comment.content }}</p>
+            {% if comment.creator == request.user %}
+                <a href="{% url 'task_comment_delete_view' projectPK=project.pk taskPK=task.pk commentPK=comment.pk %}" style="text-decoration: none"><i class="fas fa-trash"> </i></a>
+            {% endif %}
+          </div>
+        </div>
+    {% endfor %}
 {% endblock %}

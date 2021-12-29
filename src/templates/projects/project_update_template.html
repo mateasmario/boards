@@ -1,10 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% include 'projects/project_nav.html' %}
     <form method="POST">
         {% csrf_token %}
-        <input type="text" name="title" placeholder="Project Title" value="{{ project.title }}" required>
-        <textarea name="description" placeholder="Project Description" required>{{ project.description }}</textarea>
-        <input type="submit" value="Update">
+        <fieldset   >
+            <legend>Edit {{ project.title }}</legend>
+            <div class="form-group">
+                <label class="form-label mt-4">Project Title</label>
+                <input type="text" class="form-control" placeholder="Enter project title" name="title" value="{{ project.title }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Description</label>
+                <textarea class="form-control" rows="3" name="description" required>{{ project.description }}</textarea>
+            </div>
+
+            <fieldset class="form-group">
+                <legend class="mt-4"></legend>
+                <label class="form-label" id="output" required>My project is oriented towards {{ project.averageNoPeople }} people</label>
+                <input type="range" class="form-range"  value="{{ project.averageNoPeople }}" min="0" max="100" step="10" id="slider" oninput="modifyValue()" name="averageNoPeople">
+            </fieldset>
+
+            <div class="form-group">
+                <label class="form-label mt-4">GitHub URL</label>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fab fa-github"> </i></span>
+                        <input type="text" class="form-control" name="github" value="{{ project.github }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label mt-4">Developer's Website URL</label>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-globe"> </i></span>
+                        <input type="text" class="form-control" name="devwebsite" value="{{ project.devwebsite }}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update project</button>
     </form>
 {% endblock %}

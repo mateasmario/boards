@@ -7,10 +7,6 @@ from django.shortcuts import render, redirect
 
 from backend.views.HelperFunctions import *
 
-@login_required
-def index_view(request):
-    return HttpResponse(str(request.user))
-
 def auth_login_view(request): # ../auth/login/
     if request.method == "POST":
         username = request.POST['username']
@@ -18,6 +14,8 @@ def auth_login_view(request): # ../auth/login/
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            deleteMessages(request)
+            messages.add_message(request, messages.SUCCESS, "Successfully logged in as " + str(request.user) + ".")
             return redirect("/")
         else:
             messages.add_message(request, messages.ERROR, "Incorrect username and/or password.")
