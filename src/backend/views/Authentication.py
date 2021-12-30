@@ -21,7 +21,7 @@ def auth_login_view(request): # ../auth/login/
             messages.add_message(request, messages.ERROR, "Incorrect username and/or password.")
             return redirect("/auth/login")
     else:
-        return render(request, "authentication/login_template.html")
+        return render(request, "authentication/auth_login_template.html")
 
 def auth_register_view(request): # ../auth/register/
     if request.user.is_authenticated:
@@ -52,8 +52,9 @@ def auth_register_view(request): # ../auth/register/
                     messages.add_message(request, messages.ERROR, "Your password should have a length of at least 8 characters, contain at least a digit, contain at least an uppercase letter and contain at least a lowercase letter.")
                     return redirect("/auth/register")
         else:
-            return render(request, "authentication/register_template.html")
+            return render(request, "authentication/auth_register_template.html")
 
+@login_required
 def auth_logout_view(request): # ../auth/logout
     logout(request)
     return redirect('/')

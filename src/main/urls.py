@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from backend.views.Authentication import *
+from backend.views.Profile import *
 from backend.views.Projects import *
 from backend.views.Tasks import *
 from backend.views.Configuration import *
@@ -50,6 +51,9 @@ urlpatterns = [
     path('projects/<int:projectPK>/tasks/<int:taskPK>/mark_unsolved/', task_mark_unsolved_view, name="task_mark_unsolved_view"),
     path('projects/<int:projectPK>/tasks/<int:taskPK>/comments/add', task_comment_add_view, name="task_comment_add_view"),
     path('projects/<int:projectPK>/tasks/<int:taskPK>/comments/<int:commentPK>/delete', task_comment_delete_view, name="task_comment_delete_view"),
+
+    # Profile
+    path('profile/<str:username>/', profile_view, name="profile_view"),
 
     # Configuration
     path('settings/', settings_view, name="settings_view"),

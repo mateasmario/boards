@@ -61,6 +61,10 @@ def project_create_view(request): # ../projects/create/
                 deleteMessages(request)
                 messages.add_message(request, messages.ERROR, "The URL you typed in is not a valid GitHub repo link.")
                 return redirect("/projects/create")
+            elif github != "" and repoExists(github) == False:
+                deleteMessages(request)
+                messages.add_message(request, messages.ERROR, "The repo with the specified URL does not exist.")
+                return redirect("/projects/create")
             else:
                 Project.objects.create(title=title, description=description, averageNoPeople=averageNoPeople, github=github, devwebsite=devwebsite, owner=owner)
                 deleteMessages(request)
@@ -78,9 +82,19 @@ def project_update_view(request, projectPK):
             averageNoPeople = request.POST['averageNoPeople']
             github = request.POST['github']
             devwebsite = request.POST['devwebsite']
+
+            if Project.objects.filter(title=title, owner=Project.objects.get(pk=projectPK).owner).exists() and title != Project.objects.get(pk=projectPK).title:
+                deleteMessages(request)
+                messages.add_message(request, messages.ERROR, "Project with the same name already exists in your account.")
+                return redirect("/projects/" + str(projectPK) + "/update")
+
             if github != "" and isGitHubURL(github) == False:
                 deleteMessages(request)
                 messages.add_message(request, messages.ERROR, "The URL you typed in is not a valid GitHub repo link.")
+                return redirect("/projects/" + str(projectPK) + "/update")
+            elif github != "" and repoExists(github) == False:
+                deleteMessages(request)
+                messages.add_message(request, messages.ERROR, "The repo with the specified URL does not exist.")
                 return redirect("/projects/" + str(projectPK) + "/update")
             else:
                 Project.objects.filter(pk=projectPK).update(title=title, description=description, averageNoPeople=averageNoPeople, devwebsite=devwebsite, github=github)
@@ -166,7 +180,7 @@ def project_github_view(request, projectPK):
             url += "/"
             url += urlList[-1]
 
-            response = requests.get('https://api.github.com/repos/' + url, auth=('mateasmario', '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'), headers=headers)
+            response = requests.get('https://api.github.com/repos/' + url, auth=('mateasmario', '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'), headers=headers)
             github = response.json()
 
             context = {

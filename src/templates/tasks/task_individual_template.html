@@ -9,6 +9,14 @@
         <span style="color:lightslategray"><i class="fas fa-circle"> </i> Unsolved</span>
     {% endif %}
     <br>
+    {% if project.github %}
+        {% if task.commit == "" %}
+            <i class="fab fa-github"> </i> No commit linked
+        {% else %}
+            <i class="fab fa-github"> </i> Commit <a href="{{ project.github }}/commit/{{ task.commit }}">{{ task.commit }}</a>
+        {% endif %}
+        <br>
+    {% endif %}
     {% if task.priority == "S"%}
         <i class="fas fa-coffee"> </i> Small Priority
     {% elif task.priority == "M" %}
@@ -36,9 +44,12 @@
 
     {% if task.assignee == request.user or task.issuer == request.user or isMod %}
         {% if project.github != "" %}
-        <input type="text" class="form-control" style="width: 50%; display: inline" placeholder="Enter Commit ID">
-        <a href="#"><button type="button" class="btn btn-primary"><i class="fas fa-code-branch"> </i> Link Commit</button></a>
-        <br><br>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" class="form-control" style="width: 50%; display: inline" placeholder="Enter Commit ID" name="commit" value="{{ task.commit }}">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-code-branch"> </i> Link Commit</button>
+                <br><br>
+            </form>
         {% endif %}
         {% if task.solved %}
         <a href="{% url 'task_mark_unsolved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary">Mark as unsolved</button></a>

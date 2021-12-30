@@ -18,7 +18,7 @@
         </li>
         {% if request.user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-user"> </i> {{ request.user }}</a>
+                <a class="nav-link" href="{% url 'profile_view' username=request.user.username %}"><i class="fas fa-user"> </i> {{ request.user }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'auth_logout_view' %}"><i class="fas fa-sign-out-alt"> </i> Log out</a>

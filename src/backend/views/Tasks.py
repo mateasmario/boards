@@ -27,21 +27,33 @@ def task_list_view(request, projectPK): # ../projects/<int:projectPK>/tasks
 
 @login_required
 def task_individual_view(request, projectPK, taskPK): # ../projects/<int:projectPK>/tasks/<int:taskPK>
-    if isMember(projectPK, request.user) and taskExists(taskPK):
-        task = Task.objects.get(pk=taskPK)
-        context = {
-            'task': task,
-            'comments': Comment.objects.filter(task=task).order_by('date').reverse(),
-            'project': Project.objects.get(pk=projectPK),
-            'isOwner': isOwner(projectPK, request.user),
-            'isMod': isMod(projectPK, request.user),
-
-        }
-        return render(request, "tasks/task_individual_template.html", context)
+    if request.method == "POST":
+        if (isAssignee(taskPK, projectPK) or isMod(projectPK, request.user)) and Project.objects.get(pk=projectPK).github != "":
+            commit = request.POST['commit']
+            Task.objects.filter(pk=taskPK).update(commit=commit)
+            deleteMessages(request)
+            messages.add_message(request, messages.SUCCESS, "Linked commit " + commit + " to task" + str(taskPK) + ".")
+            return redirect('/projects/' + str(projectPK) + '/tasks/' + str(taskPK))
+        else:
+            deleteMessages(request)
+            messages.add_message(request, messages.ERROR, "Could not link commit to the specified task.")
+            return redirect('/projects/' + str(projectPK) + '/tasks' + str(taskPK))
     else:
-        deleteMessages(request)
-        messages.add_message(request, messages.ERROR, "You can't view that task.")
-        return redirect('/projects/' + str(projectPK))
+        if isMember(projectPK, request.user) and taskExists(taskPK):
+            task = Task.objects.get(pk=taskPK)
+            context = {
+                'task': task,
+                'comments': Comment.objects.filter(task=task).order_by('date').reverse(),
+                'project': Project.objects.get(pk=projectPK),
+                'isOwner': isOwner(projectPK, request.user),
+                'isMod': isMod(projectPK, request.user),
+
+            }
+            return render(request, "tasks/task_individual_template.html", context)
+        else:
+            deleteMessages(request)
+            messages.add_message(request, messages.ERROR, "You can't view that task.")
+            return redirect('/projects/' + str(projectPK))
 
 @login_required
 def task_create_view(request, projectPK): # ../projects/<int:projectPK>/tasks/create

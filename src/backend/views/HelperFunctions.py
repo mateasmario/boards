@@ -1,3 +1,4 @@
+import requests
 from django.contrib import messages
 
 from backend.models.Comment import Comment
@@ -108,3 +109,29 @@ def isGitHubURL(url):
     except:
         return False
     return False
+
+def repoExists(githubURL):
+    headers = {
+        'Accept': 'application/vnd.github.v3+json',
+    }
+
+    urlList = githubURL.split("/")
+    url = ""
+    url += urlList[-2]
+    url += "/"
+    url += urlList[-1]
+
+    response = requests.get('https://api.github.com/repos/' + url,
+                            auth=('mateasmario', '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'), headers=headers)
+    github = response.json()
+
+    try:
+        message = github['message']
+    except:
+        message = "Found"
+
+    if message == "Not Found":
+        return False
+
+
+    return True
