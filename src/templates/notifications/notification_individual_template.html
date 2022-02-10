@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if notification.type == "TA" %}
+        <h4>Task Assignment</h4>
+        <i class="fas fa-calendar"> </i> {{ notification.date }}<br>
+        <a href="{% url 'project_individual_view' projectPK=notification.project.pk %}"><i class="fas fa-folder-open"> </i> {{ notification.project.title }}</a><br><br>
+        You were assigned task <a href="{% url 'task_individual_view' projectPK=notification.project.pk taskPK=notification.task.pk %}">{{ notification.task.title }}</a>.<br><br>
+        <a href="{% url 'notification_delete_view' notificationPK=notification.pk %}"><button type="button" class="btn btn-danger"><i class="fas fa-trash"> </i> Delete Notification</button></a>
+    {% elif notification.type == "TC" %}
+        <h4>Task assignee change</h4>
+        <i class="fas fa-calendar"> </i> {{ notification.date }}<br>
+        <a href="{% url 'project_individual_view' projectPK=notification.project.pk %}"><i class="fas fa-folder-open"> </i> {{ notification.project.title }}</a><br><br>
+        You are no longer the assignee of task <a href="{% url 'task_individual_view' projectPK=notification.project.pk taskPK=notification.task.pk %}">{{ notification.task.title }}</a>.<br><br>
+        <a href="{% url 'notification_delete_view' notificationPK=notification.pk %}"><button type="button" class="btn btn-danger"><i class="fas fa-trash"> </i> Delete Notification</button></a>
+    {% elif notification.type == "TU" %}
+    <h4>Task Update</h4>
+        <i class="fas fa-calendar"> </i> {{ notification.date }}<br>
+        <a href="{% url 'project_individual_view' projectPK=notification.project.pk %}"><i class="fas fa-folder-open"> </i> {{ notification.project.title }}</a><br><br>
+        Task <a href="{% url 'task_individual_view' projectPK=notification.project.pk taskPK=notification.task.pk %}">{{ notification.task.title }}</a> has been updated.<br><br>
+        <a href="{% url 'notification_delete_view' notificationPK=notification.pk %}"><button type="button" class="btn btn-danger"><i class="fas fa-trash"> </i> Delete Notification</button></a>
+    {% elif notification.type == "PI" %}
+        <h4>Project invitation</h4>
+        <i class="fas fa-calendar"> </i> {{ notification.date }}<br><br>
+        You have been invited to join project <strong>{{ notification.project.title }}</strong> ({{ notification.project.pk }}).<br><br>
+        <a href="{% url 'notification_accept_view' notificationPK=notification.pk %}"><button type="button" class="btn btn-success"><i class="fas fa-check"> </i> Accept</button></a>
+        <a href="{% url 'notification_delete_view' notificationPK=notification.pk %}"><button type="button" class="btn btn-danger"><i class="fas fa-times"> </i> Reject</button></a>
+    {% endif %}
+{% endblock %}

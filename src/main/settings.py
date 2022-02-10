@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-^l0q$yq_0k(7ib0cpsixv6y2=7&uv%b_r+&9dlw(v#3xtx%-_8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['boardsforweb.com', 'boardswebapp.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -48,6 +49,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
+    "django_permissions_policy.PermissionsPolicyMiddleware",
+    # "main.middleware.CustomResponse.CustomResponse",
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -125,6 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -133,3 +138,91 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authentication configuration
 LOGIN_URL = '/auth/login'
+
+# HSTS Configuration
+SECURE_HSTS_SECONDS = 1
+
+# Keep our policy as strict as possible
+CSP_DEFAULT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+)
+CSP_STYLE_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "*.fontawesome.com",
+    "*.w3.org",
+    "maxcdn.bootstrapcdn.com",
+    "fonts.googleapis.com",
+)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "https://use.fontawesome.com",
+    "https://kit.fontawesome.com",
+    "*.jquery.com",
+    "*.cloudflare.com",
+    "*.jsdelivr.net",
+)
+CSP_FONT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "*.fontawesome.com",
+    "fonts.gstatic.com",
+)
+CSP_CONNECT_SRC = (
+    "'unsafe-inline'",
+    "*.fontawesome.com",
+)
+CSP_IMG_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "data:",
+)
+CSP_OBJECT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+)
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
+
+# CSRF Configuration
+CSRF_TRUSTED_ORIGINS = ['https://boardsforweb.com', 'https://*.boardsforweb.com']
+
+# Permissions Policy Configuration
+PERMISSIONS_POLICY = {
+    "accelerometer": [],
+    "ambient-light-sensor": [],
+    "autoplay": [],
+    "camera": [],
+    "display-capture": [],
+    "document-domain": [],
+    "encrypted-media": [],
+    "fullscreen": [],
+    "geolocation": [],
+    "gyroscope": [],
+    "interest-cohort": [],
+    "magnetometer": [],
+    "microphone": [],
+    "midi": [],
+    "payment": [],
+    "usb": [],
+}
+
+# HSTS Configuration
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# X-XSS-Protection Configuration
+SECURE_BROWSER_XSS_FILTER = True
+
+# More Security Configuration
+CSRF_COOKIE_SECURE = True
+CSRF_USE_SESSIONS = True
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'Strict'
+SECURE_CONTENT_TYPE_NOSNIFF = True

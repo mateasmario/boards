@@ -13,7 +13,7 @@ class Task(models.Model):
         ('S', 'Small'),
         ('M', 'Medium'),
         ('H', 'High'),
-        ('U', 'Urgent'),
+        ('E', 'Extremely High'),
     )
     priority = models.CharField(max_length=1, choices=PRIORITIES, default='S')
 

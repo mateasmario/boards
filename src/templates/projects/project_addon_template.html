@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+    <h3>Manage add-ons for {{ project.title }}</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+          <legend class="mt-4">Forums</legend>
+          <div class="form-check">
+            {% if project.forums %}
+            <input class="form-check-input" type="checkbox" name="forums" value="true" id="forumsCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="forums" value="true" id="forumsCheck">
+            {% endif %}
+            <label class="form-check-label" for="forumsCheck">
+              Enable Forums
+            </label><br>
+            <small class="form-text text-muted">Forums allow your project's users to create topics and start discussions with other members. Project Moderators also inherit Forums moderation permissions.</small>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mt-4">Contact Page</legend>
+          <div class="form-check">
+            {% if project.contact_page %}
+            <input class="form-check-input" type="checkbox" name="contact_page" value="true" id="contactPageCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="contact_page" value="true" id="contactPageCheck">
+            {% endif %}
+            <label class="form-check-label" for="contactPageCheck">
+              Enable Contact Page
+            </label><br>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mt-4">Resources</legend>
+          <div class="form-check">
+            {% if project.resources %}
+            <input class="form-check-input" type="checkbox" name="resources" value="true" id="resourcesCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="resources" value="true" id="resourcesCheck">
+            {% endif %}
+            <label class="form-check-label" for="resourcesCheck">
+              Enable Resources
+            </label><br>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mt-4">FAQ</legend>
+          <div class="form-check">
+            {% if project.faq %}
+            <input class="form-check-input" type="checkbox" name="faq" value="true" id="faqCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="faq" value="true" id="faqCheck">
+            {% endif %}
+            <label class="form-check-label" for="faqCheck">
+              Enable FAQ
+            </label><br>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mt-4">Project Schema</legend>
+          <div class="form-check">
+            {% if project.schema %}
+            <input class="form-check-input" type="checkbox" name="schema" value="true" id="schemaCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="schema" value="true" id="schemaCheck">
+            {% endif %}
+            <label class="form-check-label" for="schemaCheck">
+              Enable Project Schema
+            </label><br>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mt-4">Meetings</legend>
+          <div class="form-check">
+            {% if project.meetings %}
+            <input class="form-check-input" type="checkbox" name="meetings" value="true" id="meetingsCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="meetings" value="true" id="meetingsCheck">
+            {% endif %}
+            <label class="form-check-label" for="meetingsCheck">
+              Enable Meetings
+            </label><br>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mt-4">Discussions</legend>
+          <div class="form-check">
+            {% if project.meetings %}
+            <input class="form-check-input" type="checkbox" name="discussions" value="true" id="discussionsCheck" checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name="discussions" value="true" id="discussionsCheck">
+            {% endif %}
+            <label class="form-check-label" for="discussionsCheck">
+              Enable Meetings
+            </label><br>
+          </div>
+        </fieldset>
+        <br>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+{% endblock %}

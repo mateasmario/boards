@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <a href="{% url 'ticket_create_view' %}"><button type="button" class="btn btn-primary"><i class="fas fa-plus"> </i> Create a ticket</button></a>
+    <br><br>
+    <h3>Your tickets</h3>
+    {% if tickets.count %}
+        <div class="list-group">
+            {% for ticket in tickets %}
+                <a href="{% url 'ticket_individual_view' ticketPK=ticket.pk %}" class="list-group-item list-group-item-action">
+                    {% if ticket.open == False %}
+                        <i class="fas fa-lock"> </i>
+                    {% endif %}
+                    </span>
+                        <strong>Ticket {{ ticket.pk }}</strong><br><small>For project {{ ticket.project.title }}<br>Created on {{ ticket.date }}</small></a>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p style="display: inline">No tickets available at this moment.<br>
+                </p>
+            {% endif %}
+{% endblock %}

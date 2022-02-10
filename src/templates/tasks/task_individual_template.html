@@ -9,14 +9,22 @@
         <span style="color:lightslategray"><i class="fas fa-circle"> </i> Unsolved</span>
     {% endif %}
     <br>
+    {% if project.github %}
+        {% if task.commit == "" %}
+            <i class="fab fa-github"> </i> No commit linked
+        {% else %}
+            <i class="fab fa-github"> </i> Commit <a href="{{ project.github }}/commit/{{ task.commit }}">{{ task.commit }}</a>
+        {% endif %}
+        <br>
+    {% endif %}
     {% if task.priority == "S"%}
         <i class="fas fa-coffee"> </i> Small Priority
     {% elif task.priority == "M" %}
         <i class="fas fa-coffee"> </i> Medium Priority
     {% elif task.priority == "H" %}
         <i class="fas fa-coffee"> </i> High Priority
-    {% elif task.priority == "U" %}
-        <i class="fas fa-coffee"> </i> Urgent Priority
+    {% elif task.priority == "E" %}
+        <i class="fas fa-coffee"> </i> Extremely High Priority
     {% endif %}
     <br>
     {% if task.type == "F" %}
@@ -36,18 +44,26 @@
 
     {% if task.assignee == request.user or task.issuer == request.user or isMod %}
         {% if project.github != "" %}
-        <input type="text" class="form-control" style="width: 50%; display: inline" placeholder="Enter Commit ID">
-        <a href="#"><button type="button" class="btn btn-primary"><i class="fas fa-code-branch"> </i> Link Commit</button></a>
-        <br><br>
+            <form method="POST">
+                {% csrf_token %}
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 90%"><input type="text" class="form-control" placeholder="Enter Commit ID" name="commit" value="{{ task.commit }}"></td>
+                        <td><button style="width: 100%" type="submit" class="btn btn-primary"><i class="fas fa-code-branch"> </i> Link Commit</button></td>
+                    </tr>
+                </table>
+                <br>
+            </form>
         {% endif %}
         {% if task.solved %}
-        <a href="{% url 'task_mark_unsolved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary">Mark as unsolved</button></a>
+        <a href="{% url 'task_mark_unsolved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary"><i class="fas fa-times"> </i> Mark as unsolved</button></a>
         {% else %}
-        <a href="{% url 'task_mark_solved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary">Mark as solved</button></a>
+        <a href="{% url 'task_mark_solved_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary"><i class="fas fa-check"> </i> Mark as solved</button></a>
         {% endif %}
     {% endif %}
     {% if task.issuer == request.user or isMod %}
-        <a href="{% url 'task_delete_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-danger">Delete Task</button></a>
+        <a href="{% url 'task_update_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" class="btn btn-primary"><i class="fas fa-edit"> </i> Edit Task</button></a>
+        <a href="{% url 'task_delete_view' projectPK=project.pk taskPK=task.pk %}"><button type="button" onclick="return confirm('Are you sure you want to delete this task?');" class="btn btn-danger"><i class="fas fa-trash"> </i> Delete Task</button></a>
     {% endif %}
 
     <br><br>

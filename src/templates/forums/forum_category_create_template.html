@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'forum_category_list_view' projectPK=project.pk %}">Forums</a></li>
+      <li class="breadcrumb-item">Create a category</a></li>
+    </ol>
+
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Create a category</legend>
+            <div class="form-group">
+                <label class="form-label mt-4">Category Title</label>
+                <input type="text" class="form-control" placeholder="e.g. 'Announcements'" name="title" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Category Description</label>
+                <input type="text" class="form-control" placeholder="e.g. 'A category no one's probably going to click on...'" name="description" required>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </fieldset>
+    </form>
+{% endblock %}

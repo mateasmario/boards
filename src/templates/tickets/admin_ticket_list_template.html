@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>Open Tickets</h3>
+    {% if tickets.count %}
+        <div class="list-group">
+            {% for ticket in tickets %}
+                <a href="{% url 'ticket_individual_view' ticketPK=ticket.pk %}" class="list-group-item list-group-item-action">
+                    {% if task.solved %}
+                        <span style="color:cornflowerblue">
+                    {% else %}
+                        <span style="color:lightslategray">
+                    {% endif %}
+                    <i class="fas fa-circle"> </i>
+                    </span>
+                    <strong>Ticket {{ ticket.pk }}</strong><br><small>For project {{ ticket.project.title }}<br>Created by <i class="fas fa-user"> </i> {{ ticket.issuer }} on {{ ticket.date }}</small></a>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p style="display: inline">No tickets available at this moment.<br>
+                </p>
+            {% endif %}
+{% endblock %}

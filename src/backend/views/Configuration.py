@@ -22,4 +22,7 @@ def settings_view(request):
             request.session['disableinformalmessages'] = False
         return redirect('/settings')
     else:
-        return render(request, 'configuration/settings_template.html')
+        context = {
+            'unreadNotifications': Notification.objects.filter(to=request.user, read=False),
+        }
+        return render(request, 'configuration/settings_template.html', context)

@@ -3,13 +3,19 @@
 {% block content %}
     {% include 'projects/project_nav.html' %}
     <h4><i class="fas fa-user-shield"> </i> Owner</h4>
-        {{ project.owner }}<br>
+        <a href="{% url 'profile_view' username=project.owner.username %}" style="text-decoration: none"><i class="fas fa-angle-right"> </i> {{ project.owner }}</a><br>
     <br>
     <h4><i class="fas fa-user-cog"> </i> Moderators</h4>
-        {% if mods.count %}
+        {% if project.mods.count %}
             {% for mod in project.mods.all %}
-                {{ mod }}<br>
+                <a href="{% url 'profile_view' username=mod.username %}" style="text-decoration: none"><i class="fas fa-angle-right"> </i> {{ mod }}</a>
+                {% if isOwner %}
+                    (<a href="#">Kick</a> / <a href="{% url 'project_demote_view' projectPK=project.pk username=mod.username %}">Demote to Member</a>)
+                {% elif isMod %}
+                    (<a href="#">Kick</a>)
+                {% endif %}
             {% endfor %}
+            <br>
         {% else %}
             There are currently no moderators on this project.<br>
         {% endif %}
@@ -17,7 +23,13 @@
     <h4><i class="fas fa-user-tag"> </i> Members</h4>
         {% if project.members.count %}
             {% for member in project.members.all %}
-                {{ member }}<br>
+                <a href="{% url 'profile_view' username=member.username %}" style="text-decoration: none"><i class="fas fa-angle-right"> </i> {{ member }}<br></a>
+                {% if isOwner %}
+                    (<a href="#">Kick</a> / <a href="{% url 'project_promote_view' projectPK=project.pk username=member.username %}">Promote to Moderator</a>)
+                {% elif isMod %}
+                    (<a href="#">Kick</a>)
+                {% endif %}
+                <br>
             {% endfor %}
         {% else %}
             There are currently no members on this project.<br>

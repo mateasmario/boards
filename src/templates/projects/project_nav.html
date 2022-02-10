@@ -1,12 +1,73 @@
- <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'project_individual_view' projectPK=project.pk %}" style="text-decoration: none"><i class="fas fa-folder"> </i> {{ project.title }}</a></li>
-      <li class="breadcrumb-item project-menu-item"><a href="{% url 'task_list_view' projectPK=project.pk %}" style="text-decoration: none">Tasks</a></li>
-      <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_members_view' projectPK=project.pk %}" style="text-decoration: none">Members</a></li>
-      {% if project.github %}
-          <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_github_view' projectPK=project.pk %}" style="text-decoration: none">GitHub</a></li>
-      {% endif %}
-      {% if isOwner %}
-        <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_update_view' projectPK=project.pk %}" style="text-decoration: none">Edit Project</a></li>
-        <li class="breadcrumb-item project-menu-item"><a href="{% url 'project_delete_view' projectPK=project.pk %}" onclick="return confirm('Are you sure you want to delete project {{ project.title }}?');" style="text-decoration: none"><span style="color:orangered">Delete Project</span></a></li>
-      {% endif %}
-    </ol>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'project_individual_view' projectPK=project.pk %}"><i class="fas fa-folder"> </i> {{ project.title }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'task_list_view' projectPK=project.pk %}"><i class="fas fa-tasks"> </i> Tasks</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'project_members_view' projectPK=project.pk %}"><i class="fas fa-users"> </i> Members</a>
+        </li>
+        {% if project.github %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'project_github_view' projectPK=project.pk %}"><i class="fab fa-github"> </i> GitHub</a>
+            </li>
+        {% endif %}
+        {% if project.forums %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'forum_category_list_view' projectPK=project.pk %}"><i class="fas fa-align-left"> </i> Forums</a>
+            </li>
+        {% endif %}
+        {% if project.contact_page %}
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-address-book"> </i> Contact</a>
+            </li>
+        {% endif %}
+        {% if project.resources %}
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-download"> </i> Resources</a>
+            </li>
+        {% endif %}
+        {% if project.faq %}
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-question-circle"> </i> FAQ</a>
+            </li>
+        {% endif %}
+        {% if project.schema %}
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-image"> </i> Schema</a>
+            </li>
+        {% endif %}
+        {% if project.meetings %}
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-microphone"> </i> Meetings</a>
+            </li>
+        {% endif %}
+        {% if project.discussions %}
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-comments"> </i> Discussions</a>
+            </li>
+        {% endif %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"> </i> Actions</a>
+              <div class="dropdown-menu">
+              {% if isOwner %}
+                <a class="dropdown-item" href="{% url 'project_update_view' projectPK=project.pk %}">Edit Project</a>
+                <a class="dropdown-item" href="{% url 'project_delete_view' projectPK=project.pk %}" onclick="return confirm('Are you sure you want to delete project {{ project.title }}?');">Delete Project</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'project_addon_view' projectPK=project.pk %}"><i class="fas fa-star"> </i> Add-ons</a>
+              {% else %}
+                <a class="dropdown-item" href="{% url 'project_leave_view' projectPK=project.pk %}" onclick="return confirm('Are you sure you want to leave project {{ project.title }}?');"><i class="fas fa-sign-out-alt"> </i> Leave Project</a>
+              {% endif %}
+              </div>
+            </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<br>

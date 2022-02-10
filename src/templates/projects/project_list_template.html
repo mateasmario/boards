@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if hasProjects == False %}
+        Seems like you don't have any projects at this moment. Why not <a href="{% url 'project_create_view' %}">create one</a>?
+    {% endif %}
+
     {% for proj in ownedProjects %}
           <a href="{% url 'project_individual_view' projectPK=proj.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">

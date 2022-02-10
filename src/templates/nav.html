@@ -14,14 +14,34 @@
           <a class="nav-link" href="{% url 'project_create_view' %}"><i class="fas fa-plus"> </i> Create</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="fas fa-life-ring"> </i> Support</a>
+          <a class="nav-link" href="{% url 'ticket_list_view' %}"><i class="fas fa-life-ring"> </i> Tickets</a>
         </li>
         {% if request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-user"> </i> {{ request.user }}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'auth_logout_view' %}"><i class="fas fa-sign-out-alt"> </i> Log out</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    {% if request.user.is_staff %}
+                        <i class="fa fa-user-shield"> </i>
+                    {% else %}
+                        <i class="fas fa-user"> </i>
+                    {% endif %}
+                    {{ request.user }}
+                </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'profile_view' username=request.user.username %}"><i class="fas fa-eye"> </i> View Profile</a>
+                {% if unreadNotifications %}
+                <a class="dropdown-item" href="{% url 'notification_list_view' %}"><i class="fas fa-envelope"> </i> Notifications <span class="badge rounded-pill" style="background-color: darkorange">!</span></a>
+                {% else %}
+                <a class="dropdown-item" href="{% url 'notification_list_view' %}"><i class="fas fa-envelope"> </i> Notifications</a>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'auth_changepassword_view' %}"><i class="fas fa-key"> </i> Change Password</a>
+                <a class="dropdown-item" href="{% url 'auth_logout_view' %}"><i class="fas fa-sign-out-alt"> </i> Log out</a>
+                <div class="dropdown-divider"></div>
+                {% if request.user.is_staff %}
+                    <a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-tools"> </i> AdminCP</a>
+                    <a class="dropdown-item" href="{% url 'admin_ticket_list_view' %}"><i class="fas fa-life-ring"> </i> Ticket Manager</a>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'settings_view' %}"><i class="fas fa-cog"> </i> Local Settings</a>
+              </div>
             </li>
         {% else %}
             <li class="nav-item">
@@ -32,11 +52,6 @@
             </li>
         {% endif %}
       </ul>
-      {% if request.user.is_authenticated %}
-      <span class="d-flex">
-          <a href="{% url 'settings_view' %}"><button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="fas fa-cog"> </i></button></a>
-      </span>
-      {% endif %}
     </div>
   </div>
 </nav>

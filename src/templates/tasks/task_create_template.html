@@ -4,7 +4,7 @@
     {% include 'projects/project_nav.html' %}
     <form method="POST">
         {% csrf_token %}
-        <fieldset style="width: 50%">
+        <fieldset>
             <legend>Create a task</legend>
             <div class="form-group">
                 <label class="form-label mt-4">Task Title</label>
@@ -20,7 +20,7 @@
                     <option value="S">Small</option>
                     <option value="M">Medium</option>
                     <option value="H">High</option>
-                    <option value="U">Urgent</option>
+                    <option value="E">Extremely High</option>
                 </select>
             </div>
             <div class="form-group">

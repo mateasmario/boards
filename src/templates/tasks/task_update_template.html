@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Edit a task</legend>
+            <div class="form-group">
+                <label class="form-label mt-4">Task Title</label>
+                <input type="text" class="form-control" placeholder="e.g. 'Do a backflip'" name="title" value="{{ task.title }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Description</label>
+                <textarea class="form-control" rows="3" name="description" required>{{ task.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Task Priority</label>
+                <select name="priority" class="form-select">
+                    {% if task.priority == "S" %}
+                        <option value="S" selected>Small</option>
+                    {% else %}
+                        <option value="S">Small</option>
+                    {% endif %}
+
+                    {% if task.priority == "M" %}
+                        <option value="M" selected>Medium</option>
+                    {% else %}
+                        <option value="M">Medium</option>
+                    {% endif %}
+
+                    {% if task.priority == "H" %}
+                        <option value="H" selected>High</option>
+                    {% else %}
+                        <option value="H">High</option>
+                    {% endif %}
+
+                    {% if task.priority == "E" %}
+                        <option value="E" selected>Extremely High</option>
+                    {% else %}
+                        <option value="E">Extremely High</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Issue Type</label>
+                <select name="type" class="form-select">
+                    {% if task.type == "F" %}
+                        <option value="F" selected>Feature</option>
+                    {% else %}
+                        <option value="F">Feature</option>
+                    {% endif %}
+
+                    {% if task.type == "B" %}
+                        <option value="B" selected>Bug</option>
+                    {% else %}
+                        <option value="B">Bug</option>
+                    {% endif %}
+
+                    {% if task.type == "M" %}
+                        <option value="M" selected>Modification</option>
+                    {% else %}
+                        <option value="M">Modification</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Assignee</label>
+                <select name="assignee" class="form-select">
+                    {% for member in members %}
+                        {% if member.username == task.assignee.username %}
+                            <option value="{{ member.username }}" selected>{{ member.username }}</option>
+                        {% else %}
+                            <option value="{{ member.username }}">{{ member.username }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% for mod in mods %}
+                        {% if mod.username == task.assignee.username %}
+                            <option value="{{ mod.username }}" selected>{{ mod.username }}</option>
+                        {% else %}
+                            <option value="{{ mod.username }}">{{ mod.username }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if owner.username == task.assignee.username %}
+                    <option value="{{ owner.username }}" selected>{{ owner.username }}</option>
+                    {% else %}
+                    <option value="{{ owner.username }}">{{ owner.username }}</option>
+                    {% endif %}
+                </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"> </i> Save</button>
+        </fieldset>
+    </form>
+{% endblock %}

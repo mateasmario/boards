@@ -3,37 +3,86 @@
 {% block content %}
     {% include 'projects/project_nav.html' %}
 
-    <h3>{{ project.title }} <small>{{ project.pk }}</small></h3>
-    {{ project.description }}<br>
+    <div class="card mb-3">
+        <div class="card-body alert-primary">
+            <table style="width: 100%;">
+                <tr align="center">
+                    <td width="25%"><i class="fas fa-tag"></i> {{ project.pk }}</td>
+                    <td width="25%"><i class="fas fa-user-shield"></i> {{ project.owner }}</td>
+                    <td width="25%"><i class="fas fa-user-cog"></i> {{ project.mods.count }}</td>
+                    <td width="25%"><i class="fas fa-user"></i> {{ project.members.count }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="card-body">
+            <table style="width: 100%">
+                <tr>
+                    <td width="33%"><i class="fas fa-info-circle"> </i> <b>Description</b><br> {{ project.description }}</td>
+                    <td width="33%"><i class="fas fa-calendar"> </i> <b>Start date</b><br> {{ project.date }}</td>
+                    <td width="33%"><i class="fas fa-users"> </i> <b>Intended for</b><br> {{ project.averageNoPeople }} people</td>
+                </tr>
+            </table>
+            {% if project.github or project.devwebsite %}
+                <br>
+                <table style="width: 100%">
+                    <tr>
+                        {% if project.github %}
+                            <td><button class="btn btn-primary" style="width: 100%" onclick="location.href = '{{ project.github }}'"><i class="fab fa-github"> </i> GitHub</button></td>
+                        {% endif %}
+                        {% if project.devwebsite %}
+                            <td><button class="btn btn-primary" style="width: 100%" onclick="location.href = '{{ project.devwebsite }}'"><i class="fas fa-globe"> </i> Website</button></a></td>
+                        {% endif %}
+                    </tr>
+                </table>
+            {% endif %}
 
-    <br>
+        <br>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Solved tasks
+            <span class="badge bg-primary rounded-pill">{{ solvedTasks.count }} / {{ totalTasks.count }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Open tickets
+            <span class="badge bg-primary rounded-pill">{{ openTickets.count }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Invitations without reply
+            <span class="badge bg-primary rounded-pill">{{ invitationsWithoutReply.count }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+            Feature not yet available
+            <span class="badge bg-primary rounded-pill">NaN</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+            Feature not yet available
+            <span class="badge bg-primary rounded-pill">NaN</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+            Feature not yet available
+            <span class="badge bg-primary rounded-pill">NaN</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+            Feature not yet available
+            <span class="badge bg-primary rounded-pill">NaN</span>
+          </li>
+        </ul>
 
-    <i class="fas fa-user"> </i> &nbsp;User information
-    <br>
-    <ul>
-        <li>Owner: {{ project.owner }}</li>
-        <li>Moderators: {{ project.mods.count }}</li>
-        <li>Members: {{ project.members.count }}</li>
-        <li>Project intended for {{ project.averageNoPeople }} people</li>
-    </ul>
+        {% if isMod %}
+            <br>
+            <h4 class="card-title"><i class="fas fa-user-plus"> </i> Invite someone to join {{ project.title }}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">(only works if you're at least a Moderator)</h6>
+            <form action="invite/" method="POST">
+                {% csrf_token %}
+                <table style="width:100%">
+                    <tr>
+                        <td style="width: 70%"><input type="text" class="form-control" placeholder="Type in someone's name" name="username" required></td>
+                        <td style="width: 30%"><button style="width: 100%" type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"> </i> Send</button></td>
+                    </tr>
+                </table>
+            </form>
+        {% endif %}
+        </div>
 
-    <i class="fas fa-calendar"> </i> &nbsp;Released on {{ project.date }}<br>
-
-    <br>
-
-    {% if project.github %}
-        <a href="{{ project.github }}" style="text-decoration: none"><i class="fab fa-github"> </i> &nbsp;Visit GitHub Page</a><br>
-    {% endif %}
-    {% if project.devwebsite %}
-        <a href="{{ project.devwebsite }}" style="text-decoration: none"><i class="fas fa-globe"> </i>&nbsp; Visit developer's website</a><br>
-    {% endif %}
-
-    <br>
-
-    <h4 class="card-title"><i class="fas fa-user-plus"> </i> Invite someone to join {{ project.title }}</h4>
-    <h6 class="card-subtitle mb-2 text-muted">(only works if you're at least a Moderator)</h6>
-    <form action="invite/" method="POST">
-        {% csrf_token %}
-        <input type="text" class="form-control" placeholder="Type in someone's name and press ENTER" name="username" required>
-    </form>
+    </div>
 {% endblock %}

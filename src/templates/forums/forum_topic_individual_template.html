@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'forum_category_list_view' projectPK=project.pk %}">Forums</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'forum_category_individual_view' projectPK=project.pk categoryPK=category.pk %}">{{ category.title }}</a></li>
+      <li class="breadcrumb-item active">{{ topic.title }}</li>
+    </ol>
+
+    <h3>{{ topic.title }}</h3>
+    {% if topic.pinned %}
+        <span class="badge rounded-pill bg-primary">PINNED</span>
+    {% endif %}
+    Posted by <a href="{% url 'profile_view' username=topic.creator %}">{{ topic.creator }}</a> on {{ topic.date }}
+    <br><br>
+    {{ topic.content }}
+
+    <br><br>
+    {% if topic.creator == request.user %}
+        <a href="{% url 'forum_topic_update_view' projectPK=project.pk categoryPK=category.pk topicPK=topic.pk %}"><button class="btn btn-primary"><i class="fas fa-edit"> </i> Edit topic</button></a>
+        {% if topic.pinned and isMod %}
+            <a href="{% url 'forum_topic_unpin_view' projectPK=project.pk categoryPK=category.pk topicPK=topic.pk %}"><button class="btn btn-primary"><i class="fa fa-thumb-tack"> </i> Unpin topic</button></a>
+        {% elif isMod %}
+            <a href="{% url 'forum_topic_pin_view' projectPK=project.pk categoryPK=category.pk topicPK=topic.pk %}"><button class="btn btn-primary"><i class="fas fa-map-pin"> </i> Pin topic</button></a>
+        {% endif %}
+        <a href="{% url 'forum_topic_delete_view' projectPK=project.pk categoryPK=category.pk topicPK=topic.pk %}" onclick="return confirm('Are you sure you want to delete topic {{ topic.title }}?');"><button class="btn btn-danger"><i class="fas fa-trash"> </i> Delete this topic</button></a>
+    {% endif %}
+    <form action="#" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="exampleTextarea" class="form-label mt-4">Add a comment</label>
+          <textarea class="form-control" id="exampleTextarea" rows="3" name="content"></textarea><br>
+          <button type="submit" class="btn btn-primary">Add comment</button>
+        </div>
+    </form>
+    <br>
+    {% for comment in comments %}
+        <div class="list-group">
+          <div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><i class="fas fa-user"> </i> {{ comment.creator }}</h5>
+              <small class="text-muted">{{ comment.date }}</small>
+            </div>
+            <p class="mb-1">{{ comment.content }}</p>
+            {% if comment.creator == request.user %}
+                <a href="{% url 'forum_topic_comment_delete_view' projectPK=project.pk categoryPK=category.pk topicPK=topic.pk commentPK=comment.pk %}" style="text-decoration: none"><i class="fas fa-trash"> </i></a>
+            {% endif %}
+          </div>
+        </div>
+    {% endfor %}
+{% endblock %}

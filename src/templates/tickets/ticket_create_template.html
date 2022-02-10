@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Create a ticket</legend>
+            <div class="form-group">
+                <label class="form-label mt-4">Select project</label>
+                <select name="project" class="form-select" required>
+                    {% for project in projects %}
+                        <option value="{{ project.pk }}">{{ project.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-4">Content</label>
+                <textarea class="form-control" rows="3" name="content" required></textarea>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </fieldset>
+    </form>
+{% endblock %}

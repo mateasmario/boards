@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h4>Notifications</h4>
+    {% if hasNotifications == False %}
+        Seems like you don't have any notifications at this moment.
+    {% endif %}
+
+    {% for notification in notifications %}
+        {% if notification.type == "TA" %}
+            <a href="{% url 'notification_individual_view' notificationPK=notification.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        {% if notification.read == False %}
+                            <span class="badge rounded-pill" style="background-color: darkorange">!</span>
+                        {% endif %}
+                        <strong>{{ notification.project.title }}</strong>: Task Assignment</h5>
+                    </h5>
+                    <small class="text-muted">{{ notification.date }} </i></small>
+                </div>
+                You were assigned task '{{ notification.task.title }}'.</a>
+            </a>
+
+            {% elif notification.type == "TC" %}
+                <a href="{% url 'notification_individual_view' notificationPK=notification.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        {% if notification.read == False %}
+                            <span class="badge rounded-pill" style="background-color: darkorange">!</span>
+                        {% endif %}
+                        <strong>{{ notification.project.title }}</strong>: Task assignee has been changed</h5>
+                    </h5>
+                    <small class="text-muted">{{ notification.date }} </i></small>
+                </div>
+                You are no longer the assignee of task '{{ notification.task.title }}'.</a>
+            </a>
+
+            {% elif notification.type == "TU" %}
+                <a href="{% url 'notification_individual_view' notificationPK=notification.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        {% if notification.read == False %}
+                            <span class="badge rounded-pill" style="background-color: darkorange">!</span>
+                        {% endif %}
+                        <strong>{{ notification.project.title }}</strong>: Task Update</h5>
+                    </h5>
+                    <small class="text-muted">{{ notification.date }} </i></small>
+                </div>
+                Task '{{ notification.task.title }}' has updated its content.</a>
+            </a>
+
+            {% elif notification.type == "PI" %}
+                <a href="{% url 'notification_individual_view' notificationPK=notification.pk %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        {% if notification.read == False %}
+                            <span class="badge rounded-pill" style="background-color: darkorange">!</span>
+                        {% endif %}
+                        Project invitation
+                    </h5>
+                    <small class="text-muted">{{ notification.date }} </i></small>
+                </div>
+                You have been invited to project '{{ notification.project.title }}'.</a>
+            </a>
+            {% endif %}
+    {% endfor %}
+{% endblock %}

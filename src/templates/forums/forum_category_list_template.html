@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'projects/project_nav.html' %}
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active">Forums</li>
+    </ol>
+
+    {% if isMod %}
+        <a href="{% url 'forum_category_create_view' projectPK=project.pk %}"><button type="button" class="btn btn-primary"><i class="fas fa-plus"> </i> Create a category</button></a>
+    {% endif %}
+
+    <br><br>
+
+    {% if categories %}
+        {% for category in categories %}
+            <figure>
+              <blockquote class="blockquote">
+                <p class="mb-0">
+                    <a href="{% url 'forum_category_individual_view'  projectPK=project.pk categoryPK=category.pk %}" style="text-decoration: none">{{ category.title }}</a>
+                </p>
+
+              </blockquote>
+              <figcaption class="blockquote-footer">
+                  {{ category.description }}
+              </figcaption>
+            </figure>
+        {% endfor %}
+    {% else %}
+        There aren't any categories created at this moment.<br><br>
+    {% endif %}
+{% endblock %}
