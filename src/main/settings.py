@@ -79,14 +79,13 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'boards_db',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '',
+        'PASSWORD': 'Databasecelmaifaincurs1',
+        'HOST': 'database-2.c7x60qwimjm0.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
